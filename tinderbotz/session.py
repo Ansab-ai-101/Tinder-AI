@@ -1,13 +1,13 @@
 # Selenium: automation of browser
 from selenium import webdriver
-# from webdriver_manager.chrome import ChromeDriverManager
-import undetected_chromedriver.v2 as uc
+import undetected_chromedriver as uc
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, ElementNotVisibleException
 from selenium.webdriver.common.by import By
-
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
 
 # some other imports :-)
 import os
@@ -37,6 +37,9 @@ class Session:
     HOME_URL = "https://www.tinder.com/app/recs"
 
     def __init__(self, headless=False, store_session=True, proxy=None, user_data=False):
+        self.started = None  # Initialize self.started
+        self.started = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        print("Started session: {}\n\n".format(self.started))    
         self.email = None
         self.may_send_email = False
         self.session_data = {
@@ -112,7 +115,8 @@ class Session:
 
         # Getting the chromedriver from cache or download it from internet
         print("Getting ChromeDriver ...")
-        self.browser = uc.Chrome(options=options)  # ChromeDriverManager().install(),
+        driver = webdriver.Chrome('...', options=options)
+        self.browser = driver
         # self.browser = webdriver.Chrome(options=options)
         # self.browser.set_window_size(1250, 750)
 
@@ -172,7 +176,7 @@ class Session:
         if not self._is_logged_in():
             helper = LoginHelper(browser=self.browser)
             helper.login_by_google(email, password)
-            time.sleep(5)
+            time.sleep(20)
         if not self._is_logged_in():
             print('Manual interference is required.')
             input('press ENTER to continue')
