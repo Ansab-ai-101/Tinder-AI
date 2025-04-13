@@ -1,0 +1,8 @@
+streamlit
+openai
+undetected-chromedriver
+selenium
+python-dotenv
+requests
+geopy
+streamlit-authenticator
